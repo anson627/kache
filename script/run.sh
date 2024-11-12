@@ -1,9 +1,9 @@
 echo "Running go benchmark..."
 pushd go
-go test -bench .
+/usr/bin/time -l go test -bench . -benchtime=1m
 popd
 
 echo "Running rust benchmark..."
 pushd rust
-cargo bench
+/usr/bin/time -l cargo bench -- --measurement-time 60
 popd
