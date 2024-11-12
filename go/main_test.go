@@ -18,6 +18,7 @@ func BenchmarkEncode(b *testing.B) {
 			},
 		},
 	}
+
 	for i := 0; i < b.N; i++ {
 		_, err := json.Marshal(pod)
 		if err != nil {
@@ -27,23 +28,11 @@ func BenchmarkEncode(b *testing.B) {
 }
 
 func BenchmarkDecode(b *testing.B) {
-	pod := v1.Pod{
-		Spec: v1.PodSpec{
-			Containers: []v1.Container{
-				{
-					Name:  "example",
-					Image: "example/image",
-				},
-			},
-		},
-	}
-	data, err := json.Marshal(pod)
-	if err != nil {
-		b.Fatal(err)
-	}
+	data := `{"spec":{"containers":[{"name":"example","image":"example/image"}]}}`
+
 	for i := 0; i < b.N; i++ {
 		var decodedPod v1.Pod
-		err := json.Unmarshal(data, &decodedPod)
+		err := json.Unmarshal([]byte(data), &decodedPod)
 		if err != nil {
 			b.Fatal(err)
 		}
